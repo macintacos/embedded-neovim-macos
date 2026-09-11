@@ -113,11 +113,13 @@ struct NeovimFieldTests {
         }
         let editor = try #require(field.currentEditor())
         func type(_ keys: String...) {
-            for key in keys { #expect(coordinator.handleKeyDown(keyDown(key, window: window)) == nil) }
+            for key in keys { NSApp.sendEvent(keyDown(key, window: window)) } // the path a real keypress takes
         }
 
         coordinator.setNeovimEnabled(true)
         try await until { status == "NORMAL" && field.caretEditor.blockCaret }
+        // The key monitor's handler, so nil means AppKit never hands the key to the field. <Esc> is a no-op here.
+        #expect(coordinator.handleKeyDown(keyDown("\u{1b}", window: window)) == nil)
 
         type("u", "x") // the initial text is not undoable, so `u` must leave it for `x` to act on
         try await until { editor.string == "ello world" }

@@ -86,9 +86,7 @@ struct NeovimTextField: NSViewRepresentable {
                 status.wrappedValue = "nvim failed: \(error.localizedDescription)"
                 return
             }
-            keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-                self?.handleKeyDown(event) ?? event
-            }
+            keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown, handler: handleKeyDown)
         }
 
         private func stop() {
