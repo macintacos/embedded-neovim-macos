@@ -13,7 +13,7 @@ struct embedded_macosApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(neovimEnabled: neovimEnabled)
         }
         .windowStyle(.hiddenTitleBar)
 
